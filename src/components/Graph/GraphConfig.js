@@ -26,6 +26,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
     })
 
     useEffect(() => {
+        console.log(adjacencyMatrix);
         const font = {  
             color: "#333",
             /* face: "Quicksand", */

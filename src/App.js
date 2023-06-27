@@ -20,7 +20,23 @@ function App() {
     const [algorithm, setAlgorithm] = useState(1);
 
     // Handlers
-
+    const handleAddNode = () => {
+        // Copy first
+        let newMatrix = adjMatrix;
+        // Instansiasi matriks elemen baru, baris matriks ketetanggaan
+        let newRow = [];
+        // Menambahkan elemen secara row-wise
+        for (var i = 0; i < newMatrix.length; i++) {
+            newMatrix[i].push('0');      // instansiasi tidak terhubung
+            newRow.push('0');            // Menambah row baru dengan elemen -1 semua sebanyak kolom
+        }
+        // Menambah elemen column-wise
+        newRow.push('0');             // Ingat, elemen baru pasti bertemu elemen baru
+        newMatrix.push(newRow);       // Menambahkan instansasi baris baru matriks ketetanggaan
+        // Reset
+        setMatrix(newMatrix);
+        console.log("golll");
+    }
 
     return (
         <div style={backgroundStyle} className="flex p-[1.5vh]">
@@ -33,9 +49,9 @@ function App() {
                                 <h1 className='text-3xl font-bold'>Graph illustration</h1>
                                 <h3 className='text-xl py-1.5 font-semibold text-primaryBlue'>Result of file input</h3>
                             </div>
-                            <div className="w-2/3">
-                                <button className='bg-primaryBlue text-white text-base font-bold py-2 px-4 rounded-xl'>Add Node</button>
-                            </div>
+                            {adjMatrix && <div className="w-2/3">
+                                <button className='bg-primaryBlue text-white text-base font-bold py-2 px-4 rounded-xl' onClick={handleAddNode}>Add Node</button>
+                            </div>}
                         </div>
                         <div className='h-5/6 p-5 rounded-lg bg-gray-200'>
                             {(configFile && adjMatrix) ? (<GraphSet adjacencyMatrix={adjMatrix} solution={solution} />) : (<p>No file loaded</p>)}
