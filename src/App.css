@@ -1,0 +1,23 @@
+/* Customize the scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 10px;
+  border-radius: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: white;
+  margin-left: 1rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b4b7c4;
+  border-radius: 12px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #292F3B;
+}
