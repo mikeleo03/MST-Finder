@@ -38,32 +38,44 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
         }
 
         for (var i = 0; i < nodeCount; i++) {
-            var firstSolutionIndex = -1;
-            var isSolutionPart = false;
 
-            // If solution already rendered
-            if (solution) {
-                firstSolutionIndex = solution.indexOf(i);
-                isSolutionPart = (firstSolutionIndex !== -1) && (firstSolutionIndex < solution.length);
-            }
-
-            // Temporary graph
+            // Graph element
             tempGraph.nodes.push({
                 id: i,
                 label: "Node " + (i+1),
                 color: {
                     background: 'white',
-                    border: "#f1356d",
-                    highlight: "#f1356d"
+                    border: "#5358e2",
+                    highlight: "#5358e2"
                 },
                 /* font: font, */
                 labelHighlightBold: false,
                 shape: "circle",
             })
 
-            /* for (var j = 0; j < nodeCount; j++) {
-                
-            } */
+            // Setup edge
+            for (var j = 0; j < nodeCount; j++) {
+                if (parseInt(adjacencyMatrix[i][j]) !== 0) {  
+                    const tempEdge = {
+                        from: i,
+                        to: j,
+                        arrows: {
+                            to: false, from: false
+                        },
+                        label: adjacencyMatrix[i][j],
+                        physics: false,
+                        color: {
+                            color: "#5358e2",
+                            highlight: "#5358e2"
+                        },
+                        font: font,
+                        labelHighlightBold: false,
+                        selectionWidth: 0,
+                    }
+
+                    tempGraph.edges.push(tempEdge);
+                }
+            }
 
             setGraph(tempGraph)
         }
@@ -80,7 +92,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
         edges: {
             color: "#000000",
         },
-        height: "600px"
+        height: "400px"
     };
 
     const events = {
@@ -90,7 +102,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
     };
 
     return ( 
-        <div className="display" style={{ width: "90%" }}>
+        <div className="w-full">
             <Graph
                 style={{
                     backgroundColor: '#fafafa',
@@ -108,8 +120,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                 }}
             />
 
-            <span className="note">Drag and rearrange the nodes for more accurate interpretation</span>
-            <span className="note">(Rearrangement is recommended after finding solution as the graph will re-render)</span>
+            <h3 className='py-2 font-semibold text-lg'>Drag and rearrange the nodes for more accurate interpretation</h3>
         </div>
      );
 }
