@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import './App.css'
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -160,7 +160,7 @@ function App() {
                         </div>
                     </div>
                     <div className="text-left flex flex-col w-1/4 p-8 bg-primaryGray rounded-r-xl">
-                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} clusterNum={clusterNum} setClusterNum={setClusterNum} adjArray={adjArray} />
+                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} clusterNum={clusterNum} setClusterNum={setClusterNum} />
                     </div>
                 </div>
             </div>

@@ -3,13 +3,13 @@ import UploadImage from '../../assets/images/upload.png'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Dropdown from '../Dropdown/Dropdown';
 import prim from '../../algorithms/primMST';
 import kruskal from '../../algorithms/kruskalMST';
+import clusterMST from '../../algorithms/clusterMST'
 import { convertMatrixToIntegers } from '../../helper/helper';
 
 // Compression Forms Component
-const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution, clusterNum, setClusterNum, adjArray }) => {
+const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution, clusterNum, setClusterNum }) => {
     const textRef = useRef(null);
     const infoRef = useRef(null);
     const [enableCluster, setEnableCluster] = useState(false);
@@ -81,6 +81,28 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                 console.log(kruskalMST);
                 kruskalMST.length === adjMatrix.length - 1 ? setSolution(kruskalMST) : setSolution(null);
             }
+        } else {
+            toast.error("You haven't load any .txt file, yet!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+    }
+
+    // Do the clustering
+    const handleClustering = (e) => {
+        e.preventDefault();
+        setSolution(null);
+
+        if (adjMatrix) {
+            // Convert the adjMatrix into matrix of integer
+            let adjacency = convertMatrixToIntegers(adjMatrix);
+            console.log(clusterNum);
+            // Do the algorithm
+            let clusters = clusterMST(adjacency, clusterNum);
+
+            // Handle result
+            console.log(clusters);
+
         } else {
             toast.error("You haven't load any .txt file, yet!", {
                 position: toast.POSITION.TOP_RIGHT
@@ -183,9 +205,9 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                                     </label>
                                 </div>
                                 <div className="w-1/5">                  
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" checked={enableCluster} onChange={handleCheckbox} class="sr-only peer"></input>
-                                        <div class="w-12 h-6 bg-gray-400 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primaryBlue"></div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked={enableCluster} onChange={handleCheckbox} className="sr-only peer"></input>
+                                        <div className="w-12 h-6 bg-gray-400 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primaryBlue"></div>
                                     </label>
                                 </div>
                             </div>
@@ -207,7 +229,7 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                                 <div className="">
                                     <button
                                         className="w-full px-4 py-1.5 mt-3 text-white text-sm font-medium bg-primaryBlue hover:bg-indigo-400 active:bg-indigo-600 rounded-lg duration-150"
-                                        onClick={(e) => handleSubmit(e)}
+                                        onClick={(e) => handleClustering(e)}
                                     >
                                         Cluster!
                                     </button>
