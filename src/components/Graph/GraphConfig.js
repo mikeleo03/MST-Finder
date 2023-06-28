@@ -27,11 +27,6 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
     })
 
     useEffect(() => {
-        const font = {  
-            color: "#333",
-            /* face: "Quicksand", */
-        }
-
         // Graph configuration
         const tempGraph = {
             nodes: [],
@@ -48,7 +43,6 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                     border: "#5358e2",
                     highlight: "#5358e2"
                 },
-                /* font: font, */
                 labelHighlightBold: false,
                 shape: "circle",
             })
@@ -68,7 +62,6 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                             color: "#5358e2",
                             highlight: "#5358e2"
                         },
-                        font: font,
                         labelHighlightBold: true,
                         selectionWidth: 0,
                     }

@@ -1,43 +1,50 @@
 // Prim Algorithm for MST Finding
 function prim(adjMatrix) {
     // Initialization
-    const numVertices = adjMatrix.length;
-    const visited = new Array(numVertices).fill(false);
-    const minDistances = new Array(numVertices).fill(Infinity);
-    const parent = new Array(numVertices).fill(null);
+    let numVertices = adjMatrix.length;
+    let parent = [];
+    let minDistances = [];
+    let visited = [];
     
-    // Setup minimum distance
+    // Initialize all minDistance as infinity and not visited
+    for (let i = 0; i < numVertices; i++) {
+        minDistances[i] = Infinity, 
+        visited[i] = false;
+    }
+
+    // Preprocessing
     minDistances[0] = 0;
+    parent[0] = -1; // First node is always root
     
     // Processing
-    for (let i = 0; i < numVertices - 1; i++) {
-        const minIndex = findMinDistanceVertex(visited, minDistances);
+    const minSpanningTree = [];
+    for (let i = 0; i < numVertices; i++) {
+        const minIndex = findMinDistanceVertex(minDistances, visited, numVertices);
         visited[minIndex] = true;
     
         for (let j = 0; j < numVertices; j++) {
-            if (adjMatrix[minIndex][j] !== 0 && !visited[j] && adjMatrix[minIndex][j] < minDistances[j]) {
+            if (adjMatrix[minIndex][j] && visited[j] == false && adjMatrix[minIndex][j] < minDistances[j]) {
                 parent[j] = minIndex;
                 minDistances[j] = adjMatrix[minIndex][j];
             }
         }
+
+        if (adjMatrix[minIndex][parent[minIndex]]) {
+            minSpanningTree.push([parent[minIndex], minIndex, adjMatrix[minIndex][parent[minIndex]]]);
+        }
     }
     
-    // Minimum spanning tree result
-    const minSpanningTree = [];
-    for (let i = 1; i < numVertices; i++) {
-        minSpanningTree.push([parent[i], i, adjMatrix[parent[i]][i]]);
-    }
-  
+    // Minimum spanning tree result  
     return minSpanningTree;
 }
 
 // Helper function to look for the minimum distance of vertex in a graph
-function findMinDistanceVertex(visited, minDistances) {
+function findMinDistanceVertex(minDistances, visited, numVertices) {
     let minDistance = Infinity;
-    let minIndex = -1;
+    let minIndex;
   
-    for (let i = 0; i < minDistances.length; i++) {
-        if (!visited[i] && minDistances[i] < minDistance) {
+    for (let i = 0; i < numVertices; i++) {
+        if (visited[i] == false && minDistances[i] < minDistance) {
             minDistance = minDistances[i];
             minIndex = i;
         }

@@ -57,20 +57,26 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Convert the adjMatrix into matrix of integer
-        let adjacency = convertMatrixToIntegers(adjMatrix);
+        if (adjMatrix) {
+            // Convert the adjMatrix into matrix of integer
+            let adjacency = convertMatrixToIntegers(adjMatrix);
 
-        // Do the algorithm
-        if (algorithm === 1) {
-            // Do Prim
-            let primMST = prim(adjacency);
-            console.log(primMST);
-            setSolution(primMST);
+            // Do the algorithm
+            if (algorithm === 1) {
+                // Do Prim
+                let primMST = prim(adjacency);
+                console.log(primMST);
+                setSolution(primMST);
+            } else {
+                // do Kruskal
+                let kruskalMST = kruskal(adjacency);
+                console.log(kruskalMST);
+                setSolution(kruskalMST);
+            }
         } else {
-            // do Kruskal
-            let kruskalMST = kruskal(adjacency);
-            console.log(kruskalMST);
-            setSolution(kruskalMST);
+            toast.error("You haven't load any .txt file, yet!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
         }
     }
 

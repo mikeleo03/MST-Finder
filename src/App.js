@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import GraphSet from "./components/Graph/GraphConfig";
 import Form from "./components/Forms/Forms"
 import Dropdown from "./components/Dropdown/Dropdown";
+import { calculateTotalWeight } from './helper/helper';
 
 const backgroundStyle = {
     backgroundColor : "#ECEEF9",
@@ -34,7 +35,6 @@ function App() {
                 newArray.push(i);
             }
             setArray(newArray);
-            console.log("Nambajhh");
         }
     }, [adjMatrix]);
 
@@ -139,8 +139,23 @@ function App() {
                                 </div>
                             </div>}
                         </div>
-                        <div className='h-5/6 p-5 rounded-lg bg-gray-200'>
-                            {(configFile && adjMatrix) ? (<GraphSet adjacencyMatrix={adjMatrix} solution={solution} />) : (<p>No file loaded</p>)}
+                        <div className='h-5/6 p-5 rounded-lg bg-gray-200 flex flex-row w-full space-x-5'>
+                            <div className='w-4/5'>
+                                {(configFile && adjMatrix) ? (<GraphSet adjacencyMatrix={adjMatrix} solution={solution} />) : (<div className="flex items-center justify-center h-full bg-gray-100 rounded-xl text-l">No file loaded.</div>)}
+                            </div>
+                            <div className='w-1/5 h-full'>
+                                <h1 className='text-xl font-bold'>Result</h1>
+                                {(algorithm === 1) ? (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Prim Algorithm</h3>) : (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Kruskal Algorithm</h3>)}
+                                <h3>Total Weight : {(solution) && (calculateTotalWeight(solution))}</h3>
+                                <h3>Order : </h3>
+                                <div>
+                                    {solution && (
+                                        solution.map((obj, index) => (
+                                            <div className="text-base">Node {obj[0] + 1} - Node {obj[1] + 1} ({obj[2]})</div>
+                                    ))
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="text-left flex flex-col w-1/4 p-8 bg-primaryGray rounded-r-xl">

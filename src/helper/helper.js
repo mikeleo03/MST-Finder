@@ -55,4 +55,13 @@ function convertMatrixToIntegers(adjMatrix) {
     return intMatrix;
 }
 
-export { sortFirstAndSecond1, sortFirstAndSecond2, convertMatrixToIntegers };
+function calculateTotalWeight(solution) {
+    let total = 0;
+    for (let i = 0; i < solution.length; i++) {
+        total += solution[i][2];
+    }
+
+    return total;
+}
+
+export { sortFirstAndSecond1, sortFirstAndSecond2, convertMatrixToIntegers, calculateTotalWeight };
