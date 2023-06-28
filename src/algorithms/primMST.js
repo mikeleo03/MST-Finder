@@ -21,16 +21,18 @@ function prim(adjMatrix) {
     for (let i = 0; i < numVertices; i++) {
         const minIndex = findMinDistanceVertex(minDistances, visited, numVertices);
         visited[minIndex] = true;
-    
-        for (let j = 0; j < numVertices; j++) {
-            if (adjMatrix[minIndex][j] && visited[j] == false && adjMatrix[minIndex][j] < minDistances[j]) {
-                parent[j] = minIndex;
-                minDistances[j] = adjMatrix[minIndex][j];
+        
+        if (adjMatrix[minIndex]) {
+            for (let j = 0; j < numVertices; j++) {
+                if (adjMatrix[minIndex][j] && visited[j] == false && adjMatrix[minIndex][j] < minDistances[j]) {
+                    parent[j] = minIndex;
+                    minDistances[j] = adjMatrix[minIndex][j];
+                }
             }
-        }
 
-        if (adjMatrix[minIndex][parent[minIndex]]) {
-            minSpanningTree.push([parent[minIndex], minIndex, adjMatrix[minIndex][parent[minIndex]]]);
+            if (adjMatrix[minIndex][parent[minIndex]]) {
+                minSpanningTree.push([parent[minIndex], minIndex, adjMatrix[minIndex][parent[minIndex]]]);
+            }
         }
     }
     

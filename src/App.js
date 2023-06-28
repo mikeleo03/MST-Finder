@@ -146,14 +146,14 @@ function App() {
                             <div className='w-1/5 h-full'>
                                 <h1 className='text-xl font-bold'>Result</h1>
                                 {(algorithm === 1) ? (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Prim Algorithm</h3>) : (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Kruskal Algorithm</h3>)}
-                                <h3>Total Weight : {(solution) && (calculateTotalWeight(solution))}</h3>
+                                <h3>Total Weight : {(solution && solution.length === adjMatrix.length - 1) && (calculateTotalWeight(solution))}</h3>
                                 <h3>Order : </h3>
                                 <div>
-                                    {solution && (
+                                    {(solution && solution.length === adjMatrix.length - 1) ? (
                                         solution.map((obj, index) => (
-                                            <div className="text-base">Node {obj[0] + 1} - Node {obj[1] + 1} ({obj[2]})</div>
+                                            <div className="text-base" key={index}>Node {obj[0] + 1} - Node {obj[1] + 1} ({obj[2]})</div>
                                     ))
-                                    )}
+                                    ) : (<div className="text-base">No solution</div>)}
                                 </div>
                             </div>
                         </div>

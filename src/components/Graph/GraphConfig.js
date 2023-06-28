@@ -50,35 +50,53 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
             // Setup edge
             for (var j = 0; j < nodeCount; j++) {
                 if (parseInt(adjacencyMatrix[i][j]) !== 0) {
-                    let tempEdge = {
-                        from: i,
-                        to: j,
-                        arrows: {
-                            to: false, from: false
-                        },
-                        label: adjacencyMatrix[i][j],
-                        physics: false,
-                        color: {
-                            color: "#5358e2",
-                            highlight: "#5358e2"
-                        },
-                        labelHighlightBold: true,
-                        selectionWidth: 0,
-                    }
-
-                    // Check the solution
+                    let tempEdge;
                     if (solution) {
+                        tempEdge = {
+                            from: i,
+                            to: j,
+                            arrows: {
+                                to: false, from: false
+                            },
+                            label: adjacencyMatrix[i][j],
+                            physics: false,
+                            color: {
+                                color: "#9ca3af",
+                                highlight: "#9ca3af"
+                            },
+                            labelHighlightBold: true,
+                            selectionWidth: 0,
+                        }
+
+                        // Check the solution
                         let sortedAdj1 = sortFirstAndSecond1(solution);
                         for (let p = 0; p < sortedAdj1.length; p++) {
                             if (sortedAdj1[p][0] == i && sortedAdj1[p][1] == j) {
-                                tempEdge.color.color = "#ed6f71";
+                                tempEdge.color.color = "#dc2626";
                             }
                         }
                         let sortedAdj2 = sortFirstAndSecond2(solution);
                         for (let p = 0; p < sortedAdj2.length; p++) {
                             if (sortedAdj2[p][0] == i && sortedAdj2[p][1] == j) {
-                                tempEdge.color.color = "#ed6f71";
+                                tempEdge.color.color = "#dc2626";
                             }
+                        }
+
+                    } else {
+                        tempEdge = {
+                            from: i,
+                            to: j,
+                            arrows: {
+                                to: false, from: false
+                            },
+                            label: adjacencyMatrix[i][j],
+                            physics: false,
+                            color: {
+                                color: "#5358e2",
+                                highlight: "#5358e2"
+                            },
+                            labelHighlightBold: true,
+                            selectionWidth: 0,
                         }
                     }
 

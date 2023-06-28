@@ -14,6 +14,7 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
 
     const handleUpload = async (e) => {
         e.preventDefault();
+        setSolution(null);
         const file = e.target.files?.[0];
 
         if (file) {
@@ -56,6 +57,7 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
     // Do the process based on the algorithm
     const handleSubmit = (e) => {
         e.preventDefault();
+        setSolution(null);
 
         if (adjMatrix) {
             // Convert the adjMatrix into matrix of integer
@@ -66,12 +68,12 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                 // Do Prim
                 let primMST = prim(adjacency);
                 console.log(primMST);
-                setSolution(primMST);
+                primMST.length === adjMatrix.length - 1 ? setSolution(primMST) : setSolution(null);
             } else {
                 // do Kruskal
                 let kruskalMST = kruskal(adjacency);
                 console.log(kruskalMST);
-                setSolution(kruskalMST);
+                kruskalMST.length === adjMatrix.length - 1 ? setSolution(kruskalMST) : setSolution(null);
             }
         } else {
             toast.error("You haven't load any .txt file, yet!", {
@@ -152,11 +154,11 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                             </label>
                             <div className="flex flex-col mt-3 grid grid-cols-2 space-x-2 rounded-lg bg-secondaryYellow p-1.5">
                                 <div>
-                                    <input type="radio" id="prim" name="prim" value="Prim" checked={algorithm === 1} onChange={() => setAlgorithm(1)} className="peer hidden"></input>
+                                    <input type="radio" id="prim" name="prim" value="Prim" checked={algorithm === 1} onChange={() => {setAlgorithm(1); setSolution(null);}} className="peer hidden"></input>
                                     <label htmlFor="prim" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Prim</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="kruskal" name="kruskal" value="Kruskal" checked={algorithm === 2} onChange={() => setAlgorithm(2)} className="peer hidden"></input>
+                                    <input type="radio" id="kruskal" name="kruskal" value="Kruskal" checked={algorithm === 2} onChange={() => {setAlgorithm(2); setSolution(null);}} className="peer hidden"></input>
                                     <label htmlFor="kruskal" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Kruskal</label>
                                 </div>
                             </div>
