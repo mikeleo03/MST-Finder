@@ -1,6 +1,7 @@
 import Graph from "react-graph-vis";
 import { useState, useMemo, useEffect } from "react";
 import { v4 as uuid } from 'uuid';
+import { sortFirstAndSecond1, sortFirstAndSecond2 } from "../../helper/helper"
 
 const GraphSet = ({ adjacencyMatrix, solution }) => {
     // Basic screen configuration
@@ -8,7 +9,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
 
     useEffect(() => {
         const updateWidth = () => {
-          setWidth(window.innerWidth)
+            setWidth(window.innerWidth)
         }
 
         window.addEventListener('resize', updateWidth);
@@ -26,8 +27,6 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
     })
 
     useEffect(() => {
-        console.log("Haiii");
-        console.log(adjacencyMatrix);
         const font = {  
             color: "#333",
             /* face: "Quicksand", */
@@ -40,7 +39,6 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
         }
 
         for (var i = 0; i < nodeCount; i++) {
-
             // Graph element
             tempGraph.nodes.push({
                 id: i,
@@ -57,8 +55,8 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
 
             // Setup edge
             for (var j = 0; j < nodeCount; j++) {
-                if (parseInt(adjacencyMatrix[i][j]) !== 0) {  
-                    const tempEdge = {
+                if (parseInt(adjacencyMatrix[i][j]) !== 0) {
+                    let tempEdge = {
                         from: i,
                         to: j,
                         arrows: {
@@ -71,8 +69,24 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                             highlight: "#5358e2"
                         },
                         font: font,
-                        labelHighlightBold: false,
+                        labelHighlightBold: true,
                         selectionWidth: 0,
+                    }
+
+                    // Check the solution
+                    if (solution) {
+                        let sortedAdj1 = sortFirstAndSecond1(solution);
+                        for (let p = 0; p < sortedAdj1.length; p++) {
+                            if (sortedAdj1[p][0] == i && sortedAdj1[p][1] == j) {
+                                tempEdge.color.color = "#ed6f71";
+                            }
+                        }
+                        let sortedAdj2 = sortFirstAndSecond2(solution);
+                        for (let p = 0; p < sortedAdj2.length; p++) {
+                            if (sortedAdj2[p][0] == i && sortedAdj2[p][1] == j) {
+                                tempEdge.color.color = "#ed6f71";
+                            }
+                        }
                     }
 
                     tempGraph.edges.push(tempEdge);
@@ -82,7 +96,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
         
         setGraph(tempGraph);
 
-    }, [adjacencyMatrix])
+    }, [adjacencyMatrix, solution])
 
     // Graph key to make graph more static
     const graphKey = useMemo(uuid, [graph, adjacencyMatrix, solution])

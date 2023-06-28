@@ -18,7 +18,7 @@ const backgroundStyle = {
 function App() {
     // Program states
     const [configFile, setConfigFile] = useState(null);
-    const [adjMatrix, setMatrix] = useState([]);
+    const [adjMatrix, setMatrix] = useState(null);
     const [solution, setSolution] = useState(null);
     const [algorithm, setAlgorithm] = useState(1);
     const [from, setFrom] = useState(0);
@@ -144,7 +144,7 @@ function App() {
                         </div>
                     </div>
                     <div className="text-left flex flex-col w-1/4 p-8 bg-primaryGray rounded-r-xl">
-                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} />
+                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} />
                     </div>
                 </div>
             </div>

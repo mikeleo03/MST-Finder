@@ -3,8 +3,12 @@ import UploadImage from '../../assets/images/upload.png'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import prim from '../../algorithms/primMST';
+import kruskal from '../../algorithms/kruskalMST';
+import { convertMatrixToIntegers } from '../../helper/helper';
+
 // Compression Forms Component
-const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix }) => {
+const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution }) => {
     const textRef = useRef(null);
     const infoRef = useRef(null);
 
@@ -47,6 +51,27 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix }) => {
         })
 
         return validationFunction({ lines: lines })
+    }
+
+    // Do the process based on the algorithm
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Convert the adjMatrix into matrix of integer
+        let adjacency = convertMatrixToIntegers(adjMatrix);
+
+        // Do the algorithm
+        if (algorithm === 1) {
+            // Do Prim
+            let primMST = prim(adjacency);
+            console.log(primMST);
+            setSolution(primMST);
+        } else {
+            // do Kruskal
+            let kruskalMST = kruskal(adjacency);
+            console.log(kruskalMST);
+            setSolution(kruskalMST);
+        }
     }
 
     const isConfigFileValid = ({ lines }) => {
@@ -121,18 +146,18 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix }) => {
                             </label>
                             <div className="flex flex-col mt-3 grid grid-cols-2 space-x-2 rounded-lg bg-secondaryYellow p-1.5">
                                 <div>
-                                    <input type="radio" id="prim" name="prim" value="Basic LZW" checked={algorithm === 1} onChange={() => setAlgorithm(1)} className="peer hidden"></input>
+                                    <input type="radio" id="prim" name="prim" value="Prim" checked={algorithm === 1} onChange={() => setAlgorithm(1)} className="peer hidden"></input>
                                     <label htmlFor="prim" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Prim</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="kruskal" name="kruskal" value="Enhance with BWT + MTF" checked={algorithm === 2} onChange={() => setAlgorithm(2)} className="peer hidden"></input>
+                                    <input type="radio" id="kruskal" name="kruskal" value="Kruskal" checked={algorithm === 2} onChange={() => setAlgorithm(2)} className="peer hidden"></input>
                                     <label htmlFor="kruskal" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Kruskal</label>
                                 </div>
                             </div>
                         </div>
                         <button
                             className="w-full px-4 py-1.5 text-white font-medium bg-primaryBlue hover:bg-indigo-400 active:bg-indigo-600 rounded-lg duration-150"
-                            /* onClick={} */
+                            onClick={(e) => handleSubmit(e)}
                         >
                             Search!
                         </button>
