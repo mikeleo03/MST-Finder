@@ -9,18 +9,22 @@ import clusterMST from '../../algorithms/clusterMST'
 import { convertMatrixToIntegers } from '../../helper/helper';
 
 // Compression Forms Component
-const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution, clusterNum, setClusterNum }) => {
+const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution, clusterNum, setClusterNum, enableCluster, setEnableCluster, setClusters, setClusterRemove }) => {
     const textRef = useRef(null);
     const infoRef = useRef(null);
-    const [enableCluster, setEnableCluster] = useState(false);
 
     const handleCheckbox = (event) => {
+        setSolution(null);
+        setClusters(null);
+        setClusterRemove(null);
         setEnableCluster(event.target.checked);
     };
 
     const handleUpload = async (e) => {
         e.preventDefault();
         setSolution(null);
+        setClusters(null);
+        setClusterRemove(null);
         const file = e.target.files?.[0];
 
         if (file) {
@@ -64,6 +68,8 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
     const handleSubmit = (e) => {
         e.preventDefault();
         setSolution(null);
+        setClusters(null);
+        setClusterRemove(null);
 
         if (adjMatrix) {
             // Convert the adjMatrix into matrix of integer
@@ -92,16 +98,22 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
     const handleClustering = (e) => {
         e.preventDefault();
         setSolution(null);
+        setClusters(null);
+        setClusterRemove(null);
 
         if (adjMatrix) {
             // Convert the adjMatrix into matrix of integer
             let adjacency = convertMatrixToIntegers(adjMatrix);
-            console.log(clusterNum);
             // Do the algorithm
-            let clusters = clusterMST(adjacency, clusterNum);
+            let kruskalMST = kruskal(adjacency);
+            kruskalMST.length === adjMatrix.length - 1 ? setSolution(kruskalMST) : setSolution(null);
+            let [clustersRes, removed] = clusterMST(kruskalMST, adjacency, clusterNum);
 
             // Handle result
-            console.log(clusters);
+            console.log(removed);
+            console.log(clustersRes);
+            clustersRes.length === clusterNum ? setClusters(clustersRes) : setClusters(null);
+            removed.length === clusterNum - 1 ? setClusterRemove(removed) : setClusterRemove(null);
 
         } else {
             toast.error("You haven't load any .txt file, yet!", {
@@ -182,11 +194,11 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                             </label>
                             <div className="flex flex-col mt-2 grid grid-cols-2 space-x-2 rounded-lg bg-secondaryYellow p-1.5">
                                 <div>
-                                    <input type="radio" id="prim" name="prim" value="Prim" checked={algorithm === 1} onChange={() => {setAlgorithm(1); setSolution(null);}} className="peer hidden"></input>
+                                    <input type="radio" id="prim" name="prim" value="Prim" checked={algorithm === 1} onChange={() => {setAlgorithm(1); setSolution(null); setClusters(null); setClusterRemove(null);}} className="peer hidden"></input>
                                     <label htmlFor="prim" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Prim</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="kruskal" name="kruskal" value="Kruskal" checked={algorithm === 2} onChange={() => {setAlgorithm(2); setSolution(null);}} className="peer hidden"></input>
+                                    <input type="radio" id="kruskal" name="kruskal" value="Kruskal" checked={algorithm === 2} onChange={() => {setAlgorithm(2); setSolution(null); setClusters(null); setClusterRemove(null);}} className="peer hidden"></input>
                                     <label htmlFor="kruskal" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Kruskal</label>
                                 </div>
                             </div>

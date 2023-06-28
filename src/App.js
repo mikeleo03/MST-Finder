@@ -26,7 +26,11 @@ function App() {
     const [to, setTo] = useState(0);
     const [weight, setWeight] = useState(1);
     const [adjArray, setArray] = useState([]);
+    // Cluster state
+    const [enableCluster, setEnableCluster] = useState(false);
     const [clusterNum, setClusterNum] = useState(1);
+    const [clusters, setClusters] = useState(null);
+    const [clusterRemove, setClusterRemove] = useState(null);
 
     // Update the adjArray
     useEffect(() => {
@@ -42,6 +46,9 @@ function App() {
     // Handlers
     const handleAddNode = (event) => {
         event.preventDefault();
+        setSolution(null);
+        setClusters(null);
+        setClusterRemove(null);
 
         // Copy first
         let newMatrix = [...adjMatrix];
@@ -65,6 +72,9 @@ function App() {
 
     const handleAddEdge = (event) => {
         event.preventDefault();
+        setSolution(null);
+        setClusters(null);
+        setClusterRemove(null);
 
         // Copy first
         let newMatrix = [...adjMatrix];
@@ -142,25 +152,47 @@ function App() {
                         </div>
                         <div className='h-5/6 p-5 rounded-lg bg-gray-200 flex flex-row w-full space-x-5'>
                             <div className='w-4/5'>
-                                {(configFile && adjMatrix) ? (<GraphSet adjacencyMatrix={adjMatrix} solution={solution} />) : (<div className="flex items-center justify-center h-full bg-gray-100 rounded-xl text-l">No file loaded.</div>)}
+                                {(configFile && adjMatrix) ? (<GraphSet adjacencyMatrix={adjMatrix} solution={solution} clusterRemove={clusterRemove}/>) : (<div className="flex items-center justify-center h-full bg-gray-100 rounded-xl text-l">No file loaded.</div>)}
                             </div>
                             <div className='w-1/5 h-full'>
                                 <h1 className='text-xl font-bold'>Result</h1>
-                                {(algorithm === 1) ? (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Prim Algorithm</h3>) : (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Kruskal Algorithm</h3>)}
-                                <h3>Total Weight : {(solution && solution.length === adjMatrix.length - 1) && (calculateTotalWeight(solution))}</h3>
-                                <h3>Order : </h3>
-                                <div>
-                                    {(solution && solution.length === adjMatrix.length - 1) ? (
-                                        solution.map((obj, index) => (
-                                            <div className="text-base" key={index}>Node {obj[0] + 1} - Node {obj[1] + 1} ({obj[2]})</div>
-                                    ))
-                                    ) : (<div className="text-base">No solution</div>)}
-                                </div>
+                                {(!enableCluster) ? ((algorithm === 1) ? 
+                                    (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Prim Algorithm</h3>) 
+                                    : (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Using Kruskal Algorithm</h3>))
+                                : (<h3 className='text-lg py-1.5 font-semibold text-primaryBlue'>Clustering</h3>)}
+                                {(!enableCluster) ? (
+                                    <>
+                                        <h3>Total Weight : {(solution && solution.length === adjMatrix.length - 1) && (calculateTotalWeight(solution))}</h3>
+                                        <h3>Order : </h3>
+                                        <div>
+                                            {(solution && solution.length === adjMatrix.length - 1) ? (
+                                                solution.map((obj, index) => (
+                                                    <div className="text-base" key={index}>
+                                                        Node {obj[0] + 1} - Node {obj[1] + 1} ({obj[2]})
+                                                    </div>
+                                            ))
+                                            ) : (<div className="text-base">No solution</div>)}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h3>List of Cluster</h3>
+                                        <div>
+                                            {(clusters && clusters.length === clusterNum) ? (
+                                                clusters.map((obj, index) => (
+                                                    <div className="text-base" key={index}>
+                                                        Cluster-{index + 1} : {obj.join(', ')}
+                                                    </div>
+                                            ))
+                                            ) : (<div className="text-base">No solution</div>)}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
                     <div className="text-left flex flex-col w-1/4 p-8 bg-primaryGray rounded-r-xl">
-                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} clusterNum={clusterNum} setClusterNum={setClusterNum} />
+                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} clusterNum={clusterNum} setClusterNum={setClusterNum} enableCluster={enableCluster} setEnableCluster={setEnableCluster} setClusters={setClusters} setClusterRemove={setClusterRemove}/>
                     </div>
                 </div>
             </div>

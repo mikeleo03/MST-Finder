@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect } from "react";
 import { v4 as uuid } from 'uuid';
 import { sortFirstAndSecond1, sortFirstAndSecond2 } from "../../helper/helper"
 
-const GraphSet = ({ adjacencyMatrix, solution }) => {
+const GraphSet = ({ adjacencyMatrix, solution, clusterRemove }) => {
     // Basic screen configuration
     const [windowWidth, setWidth] = useState(window.innerWidth);
 
@@ -61,8 +61,8 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                             label: adjacencyMatrix[i][j],
                             physics: false,
                             color: {
-                                color: "#9ca3af",
-                                highlight: "#9ca3af"
+                                color: "#feae33",
+                                highlight: "#feae33"
                             },
                             labelHighlightBold: true,
                             selectionWidth: 0,
@@ -79,6 +79,23 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                         for (let p = 0; p < sortedAdj2.length; p++) {
                             if (sortedAdj2[p][0] == i && sortedAdj2[p][1] == j) {
                                 tempEdge.color.color = "#dc2626";
+                            }
+                        }
+
+                        if (clusterRemove) {
+                            let arrRemove = clusterRemove.map(obj => [obj.src, obj.dest, obj.weight]);
+                            // Check the clusterRemove
+                            let sortedCluster1 = sortFirstAndSecond1(arrRemove);
+                            for (let p = 0; p < sortedCluster1.length; p++) {
+                                if (sortedCluster1[p][0] == i && sortedCluster1[p][1] == j) {
+                                    tempEdge.color.color = "#e2e8f0";
+                                }
+                            }
+                            let sortedCluster2 = sortFirstAndSecond2(arrRemove);
+                            for (let p = 0; p < sortedCluster2.length; p++) {
+                                if (sortedCluster2[p][0] == i && sortedCluster2[p][1] == j) {
+                                    tempEdge.color.color = "#e2e8f0";
+                                }
                             }
                         }
 

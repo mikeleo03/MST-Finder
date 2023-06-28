@@ -1,5 +1,3 @@
-import kruskal from './kruskalMST';
-
 // Building DisjointSets to hanlde clustering
 class DisjointSet {
     constructor(numVertices) {
@@ -37,15 +35,15 @@ class DisjointSet {
 }
   
 // Function to do MST Clustering
-function clusterMST(adjMatrix, numClusters) {
-    let kruskalMST = kruskal(adjMatrix);
+function clusterMST(mst, adjMatrix, numClusters) {
+    // Pre process
     let clusters = [];
   
     // Remove k-1 edges with the highest weights
-    for (let i = 0; i < kruskalMST.length; i++) {
-        const src = kruskalMST[i][0];
-        const dest = kruskalMST[i][1];
-        const weight = kruskalMST[i][2];
+    for (let i = 0; i < mst.length; i++) {
+        const src = mst[i][0];
+        const dest = mst[i][1];
+        const weight = mst[i][2];
     
         // Add the edge to the cluster list
         clusters.push({ src, dest, weight });
@@ -53,19 +51,9 @@ function clusterMST(adjMatrix, numClusters) {
   
     // Sort the clusters by weight in descending order
     clusters.sort((a, b) => b.weight - a.weight);
-
-    // Check if numClusters is 1, return all vertices in a single cluster
-    if (numClusters === 1) {
-        const allVertices = [];
-        for (let i = 0; i < adjMatrix.length; i++) {
-            allVertices.push(i);
-        }
-        return [allVertices];
-    }
   
     // Remove k-1 highest weight edges
     let removed = clusters.slice(0, numClusters - 1);  // gather the removed edges
-    console.log("rem", removed);
     clusters.splice(0, numClusters - 1);
   
     // Create the clusters from the remaining connected components in the modified MST
@@ -86,13 +74,13 @@ function clusterMST(adjMatrix, numClusters) {
             result[root] = [];
         }
     
-        result[root].push(i);
+        result[root].push(i + 1);
     }
   
     // Filter out empty clusters
     const finalClusters = result.filter(cluster => cluster !== undefined);
   
-    return finalClusters;
+    return [finalClusters, removed];
 }
 
 export default clusterMST;
