@@ -3,14 +3,20 @@ import UploadImage from '../../assets/images/upload.png'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import Dropdown from '../Dropdown/Dropdown';
 import prim from '../../algorithms/primMST';
 import kruskal from '../../algorithms/kruskalMST';
 import { convertMatrixToIntegers } from '../../helper/helper';
 
 // Compression Forms Component
-const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution }) => {
+const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, setSolution, clusterNum, setClusterNum, adjArray }) => {
     const textRef = useRef(null);
     const infoRef = useRef(null);
+    const [enableCluster, setEnableCluster] = useState(false);
+
+    const handleCheckbox = (event) => {
+        setEnableCluster(event.target.checked);
+    };
 
     const handleUpload = async (e) => {
         e.preventDefault();
@@ -121,7 +127,7 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
     return (
         <main className="h-full">
             <div className="h-full mx-auto px-0 text-gray-600">
-                <div className="h-full mx-auto flex flex-col space-y-5">
+                <div className="h-full mx-auto flex flex-col space-y-3">
                     <div>
                         <h1 className='text-3xl font-bold'>MST Finder</h1>
                         <h3 className='text-base py-1.5 font-semibold text-primaryBlue'>Fill this form to configure the graph.</h3>
@@ -133,10 +139,10 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                             </label>
                             <input type="file" id="file-btn" accept=".txt" onChange={(e) => handleUpload(e)} onClick={(e) => {e.currentTarget.value = null}} hidden />
                             <label htmlFor="file-btn" className="w-full">
-                                <div className="border-2 border-dashed border-white-3 rounded-2xl p-4 py-2.5 w-full flex flex-col items-center cursor-pointer bg-primaryYellow hover:bg-secondaryYellow duration-200 mt-3">
+                                <div className="border-2 border-dashed border-white-3 rounded-2xl p-4 py-2.5 w-full flex flex-col items-center cursor-pointer bg-primaryYellow hover:bg-secondaryYellow duration-200 mt-2">
                                     <img
                                         src={UploadImage}
-                                        className="block h-16"
+                                        className="block h-14"
                                         alt=""
                                     />
                                     <p className="text-sm font-bold text-white text-center" ref={textRef}>
@@ -152,7 +158,7 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                             <label className="font-medium">
                                 Choose the algorithm
                             </label>
-                            <div className="flex flex-col mt-3 grid grid-cols-2 space-x-2 rounded-lg bg-secondaryYellow p-1.5">
+                            <div className="flex flex-col mt-2 grid grid-cols-2 space-x-2 rounded-lg bg-secondaryYellow p-1.5">
                                 <div>
                                     <input type="radio" id="prim" name="prim" value="Prim" checked={algorithm === 1} onChange={() => {setAlgorithm(1); setSolution(null);}} className="peer hidden"></input>
                                     <label htmlFor="prim" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Prim</label>
@@ -162,13 +168,52 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
                                     <label htmlFor="kruskal" className="text-sm block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-primaryBlue font-bold peer-checked:text-white h-full flex justify-center items-center">Kruskal</label>
                                 </div>
                             </div>
+                            <button
+                                className="w-full px-4 py-1.5 mt-3 text-white text-sm font-medium bg-primaryBlue hover:bg-indigo-400 active:bg-indigo-600 rounded-lg duration-150"
+                                onClick={(e) => handleSubmit(e)}
+                            >
+                                Search!
+                            </button>
                         </div>
-                        <button
-                            className="w-full px-4 py-1.5 text-white font-medium bg-primaryBlue hover:bg-indigo-400 active:bg-indigo-600 rounded-lg duration-150"
-                            onClick={(e) => handleSubmit(e)}
-                        >
-                            Search!
-                        </button>
+                        <div className="w-full">
+                            <div className="w-full flex flex-row">
+                                <div className="w-4/5">
+                                    <label className="font-medium">
+                                        Clustering
+                                    </label>
+                                </div>
+                                <div className="w-1/5">                  
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked={enableCluster} onChange={handleCheckbox} class="sr-only peer"></input>
+                                        <div class="w-12 h-6 bg-gray-400 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primaryBlue"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            {(enableCluster && adjMatrix) && <div className="flex flex-col mt-2">
+                                <div className="">
+                                    <label className="font-medium text-base mb-2">
+                                        Number of cluster
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max={adjMatrix.length}
+                                        required
+                                        className="w-full px-4 py-1.5 text-gray-500 bg-white outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                        value={clusterNum}
+                                        onChange={(e) => setClusterNum(Number(e.target.value))}
+                                    />
+                                </div>
+                                <div className="">
+                                    <button
+                                        className="w-full px-4 py-1.5 mt-3 text-white text-sm font-medium bg-primaryBlue hover:bg-indigo-400 active:bg-indigo-600 rounded-lg duration-150"
+                                        onClick={(e) => handleSubmit(e)}
+                                    >
+                                        Cluster!
+                                    </button>
+                                </div>
+                            </div>}
+                        </div>
                     </div>
                 </div>
             </div>

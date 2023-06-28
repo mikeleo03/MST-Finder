@@ -26,6 +26,7 @@ function App() {
     const [to, setTo] = useState(0);
     const [weight, setWeight] = useState(1);
     const [adjArray, setArray] = useState([]);
+    const [clusterNum, setClusterNum] = useState(1);
 
     // Update the adjArray
     useEffect(() => {
@@ -159,7 +160,7 @@ function App() {
                         </div>
                     </div>
                     <div className="text-left flex flex-col w-1/4 p-8 bg-primaryGray rounded-r-xl">
-                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} />
+                        <Form algorithm={algorithm} setAlgorithm={setAlgorithm} setConfigFile={setConfigFile} setMatrix={setMatrix} adjMatrix={adjMatrix} setSolution={setSolution} clusterNum={clusterNum} setClusterNum={setClusterNum} adjArray={adjArray} />
                     </div>
                 </div>
             </div>
