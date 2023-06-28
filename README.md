@@ -64,7 +64,7 @@ $ npm install
 $ npm start
 ```
 ### Run the application from deployed website
-You can also run the whole program by clicking this [deployment link](https://github.com/mikeleo03/MST-Finder/tree/main/src/algorithms)
+You can also run the whole program by clicking this [deployment link](https://mst-finder.vercel.app/)
 
 ## How to Use the Program
 1. Go to the website with the procedure explained before.
@@ -75,7 +75,7 @@ Get to know more about the website interface by looking at the screenshots down 
 ## Available Scripts
 In the project directory, you can run:
 
-### `npm start dev`
+### `npm start`
 
 Ths runs the app in the development mode.
 
