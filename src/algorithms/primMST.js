@@ -8,7 +8,7 @@ function prim(adjMatrix) {
     
     // Initialize all minDistance as infinity and not visited
     for (let i = 0; i < numVertices; i++) {
-        minDistances[i] = Infinity, 
+        minDistances[i] = Infinity; 
         visited[i] = false;
     }
 

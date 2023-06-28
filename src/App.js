@@ -64,7 +64,6 @@ function App() {
         newMatrix.push(newRow);       // Menambahkan instansasi baris baru matriks ketetanggaan
         // Reset
         setMatrix(newMatrix);
-        console.log(adjMatrix);
         toast.success("New node is added", {
             position: toast.POSITION.TOP_RIGHT
         });
@@ -98,8 +97,6 @@ function App() {
                 position: toast.POSITION.TOP_RIGHT
             });
         }
-
-        console.log("cek", adjMatrix);
     }
 
     return (

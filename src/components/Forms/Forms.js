@@ -28,9 +28,8 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
         const file = e.target.files?.[0];
 
         if (file) {
-            console.log(textRef.current?.textContent);
             if (textRef && textRef.current) {
-                textRef.current.textContent = 'File berhasil terunggah!';
+                textRef.current.textContent = 'File uploaded succesfully!';
             }
             if (infoRef && infoRef.current) {
                 infoRef.current.textContent = `${file.name}`;
@@ -79,12 +78,10 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
             if (algorithm === 1) {
                 // Do Prim
                 let primMST = prim(adjacency);
-                console.log(primMST);
                 primMST.length === adjMatrix.length - 1 ? setSolution(primMST) : setSolution(null);
             } else {
-                // do Kruskal
+                // Do Kruskal
                 let kruskalMST = kruskal(adjacency);
-                console.log(kruskalMST);
                 kruskalMST.length === adjMatrix.length - 1 ? setSolution(kruskalMST) : setSolution(null);
             }
         } else {
@@ -110,8 +107,6 @@ const Forms = ({ algorithm, setAlgorithm, setConfigFile, setMatrix, adjMatrix, s
             let [clustersRes, removed] = clusterMST(kruskalMST, adjacency, clusterNum);
 
             // Handle result
-            console.log(removed);
-            console.log(clustersRes);
             clustersRes.length === clusterNum ? setClusters(clustersRes) : setClusters(null);
             removed.length === clusterNum - 1 ? setClusterRemove(removed) : setClusterRemove(null);
 
