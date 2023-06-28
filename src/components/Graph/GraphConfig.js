@@ -26,6 +26,7 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
     })
 
     useEffect(() => {
+        console.log("Haiii");
         console.log(adjacencyMatrix);
         const font = {  
             color: "#333",
@@ -77,11 +78,11 @@ const GraphSet = ({ adjacencyMatrix, solution }) => {
                     tempGraph.edges.push(tempEdge);
                 }
             }
-
-            setGraph(tempGraph)
         }
+        
+        setGraph(tempGraph);
 
-    }, [adjacencyMatrix, nodeCount, solution, windowWidth])
+    }, [adjacencyMatrix])
 
     // Graph key to make graph more static
     const graphKey = useMemo(uuid, [graph, adjacencyMatrix, solution])
